@@ -2,15 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="movies.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <title>movie database</title>
 </head>
-<body bgcolor="LightGrey">
+
+<body style="background-color:LightGrey">
 <h1 style="text-align:center">There's gonna be a movie database</h1>
-<h2 style="text-align:center">and it's gonna be awwwesome! *</h2>
-<div class="bottom">
-    <h4>* I hope...</h4>
-</div>
-<img src="http://poster.keepcalmandposters.com/default/5751831_keep_calm_and_be_patient.png" class="middle" alt="keep_calm">
+<h2 style="text-align:center">and it's gonna be awwwesome!</h2><br>
+<img class="middle" src="http://poster.keepcalmandposters.com/default/5751831_keep_calm_and_be_patient.png" alt="keep_calm" width="374"><br><br>
+
+<button style="margin-left:50px" type="button" class="btn btn-info">Ladies and getlemen - the best of 2000!</button><br><br>
+
+<ol class="list-group" style="margin-left: 50px"></ol>
+<script>
+    const apiUrl = "https://peaceful-sands-32495.herokuapp.com/v1/movieDb";
+    const $list = $('.list-group');
+
+    $('.btn-info').on('click', function () {
+        const $btn = $(this);
+
+        $btn.addClass('loading');
+        $btn.prop('disabled', true);
+
+        $.ajax({
+            url: apiUrl + '/movies',
+            dataType: 'json'
+        })
+            .done((res) => {
+            $list.empty();
+
+        res.forEach(el => {
+            $list.append(`<li><b>${el.title}</b>, release date: ${el.release_date}, rating: ${el.rating}</li>`);
+    })
+    })
+    .always(() => {
+        $btn.removeClass('loading');
+        $btn.prop('disabled', false);
+    });
+    });
+</script>
 </body>
 </html>
