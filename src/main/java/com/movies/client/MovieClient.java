@@ -1,21 +1,16 @@
 package com.movies.client;
 
 import com.movies.config.MovieConfig;
-import com.movies.domain.MovieDto;
 import com.movies.domain.ResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -28,7 +23,7 @@ public class MovieClient {
     @Autowired
     MovieConfig movieConfig;
 
-    public ResponseDto getMovies() {
+    public ResponseDto getResult() {
         URI uri = UriComponentsBuilder.fromHttpUrl(movieConfig.getMdbApiEndpoint() + "/movie")
                 .queryParam("api_key", movieConfig.getMdbApiKey())
                 .queryParam("sort_by", "popularity.desc")

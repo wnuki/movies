@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseDto {
+
     @JsonProperty("results")
     private List<MovieDto> movies;
     private int page;
