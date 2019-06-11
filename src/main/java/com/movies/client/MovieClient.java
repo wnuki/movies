@@ -26,9 +26,10 @@ public class MovieClient {
     public ResponseDto getResult() {
         URI uri = UriComponentsBuilder.fromHttpUrl(movieConfig.getMdbApiEndpoint() + "/movie")
                 .queryParam("api_key", movieConfig.getMdbApiKey())
-                .queryParam("sort_by", "popularity.desc")
+                .queryParam("sort_by", "vote_average.desc")
                 .queryParam("primary_release_year", 2000)
                 .queryParam("vote_average.gte", 8)
+                .queryParam("vote_count.gte", 10)
                 .queryParam("page", 1).build().encode().toUri();
         LOGGER.info("Url created " + uri);
         try {
