@@ -10,5 +10,9 @@ This application allows to find movies meeting given criteria.
 4. JQuery 3.4
 5. Bootstrap 3.4
 
+## How to run
+1. Clone repository: https://github.com/wnuki/movies.git
+2. run "mvn spring-boot:run" 
+
 ## Deployment
 Application is deployed to https://peaceful-sands-32495.herokuapp.com/
