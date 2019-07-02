@@ -2,47 +2,89 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="movies.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="style.css" rel="stylesheet" type="text/css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+
     <title>movie database</title>
+
 </head>
 
 <body style="background-color:LightGrey">
-<h1 style="text-align:center">There's gonna be a movie database</h1>
-<h2 style="text-align:center">and it's gonna be awwwesome!</h2><br>
-<img class="middle" src="http://poster.keepcalmandposters.com/default/5751831_keep_calm_and_be_patient.png" alt="keep_calm" width="374"><br><br>
 
-<button style="margin-left:50px" type="button" class="btn btn-info">Ladies and getlemen - the best of 2000!</button><br><br>
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="text-light bg-secondary">Find movie, you'll love!</h1>
+    </div>
+</div>
+
+<form id="form">
+    <div class="form-group" style="margin-left:50px">
+        <label for="releaseYear">Let's start then. Just type a year: </label>
+        <input type="text" id="releaseYear" name="releaseYear" required minlength="4" maxlength="4" number="true">
+    </div>
+    <button style="margin-left:50px" type="button" class="btn btn-primary" id="submit_button">Show me best movies
+        in that year
+    </button>
+</form>
 
 <ol class="list-group" style="margin-left: 50px"></ol>
+
 <script>
-    const apiUrl = "https://peaceful-sands-32495.herokuapp.com/v1/movieDb";
-    const $list = $('.list-group');
+    $(document).ready(function () {
 
-    $('.btn-info').on('click', function () {
-        const $btn = $(this);
+        let releaseYear = document.getElementById("releaseYear")
+        const apiUrl = "/v1/movieDb";
+        const $list = $('.list-group');
 
-        $btn.addClass('loading');
-        $btn.prop('disabled', true);
+        $('.btn-primary').on('click', function () {
+            const $btn = $(this);
 
-        $.ajax({
-            url: apiUrl + '/movies',
-            dataType: 'json'
-        })
-            .done((res) => {
-            $list.empty();
+            $btn.addClass('loading');
+            $btn.prop('disabled', true);
 
-        res.forEach(el => {
-            $list.append(`<li><b>${el.title}</b>, release date: ${el.release_date}, rating: ${el.rating}</li>`);
+            $.ajax({
+                url: apiUrl + '/movies',
+                dataType: 'json',
+                data: {
+                    "releaseYear": releaseYear.value
+                }
+            })
+                .done((res) => {
+                    $list.empty();
+
+                    res.forEach(el => {
+                        $list.append(`<li><b>${el.title}</b>, release date: ${el.release_date}, rating: ${el.rating}</li>`);
+                    })
+                })
+                .always(() => {
+                    $btn.removeClass('loading');
+                    $btn.prop('disabled', false);
+                });
+        });
+        $("#form").validate({
+            rules: {
+                releaseYear: {
+                    required: true,
+                    number: true,
+                    minlength: 4,
+                    maxlength: 4
+                }
+            },
+            messages: {
+                releaseYear: {
+                    required: "Please enter the year",
+                    number: "Please enter the year as a numerical value",
+                    minlength: "Year should be 4 digits",
+                    maxlength: "Year should be 4 digits"
+                }
+            }
+        });
     })
-    })
-    .always(() => {
-        $btn.removeClass('loading');
-        $btn.prop('disabled', false);
-    });
-    });
 </script>
+
 </body>
 </html>

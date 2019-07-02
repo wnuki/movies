@@ -4,10 +4,7 @@ import com.movies.client.MovieClient;
 import com.movies.domain.Movie;
 import com.movies.mapper.MovieMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,8 +21,8 @@ public class MovieController {
     private MovieMapper movieMapper;
 
     @GetMapping(path = "/movies")
-    public List<Movie> getResponse() {
-        return movieClient.getResult().getMovies().stream()
+    public List<Movie> getResponse(@RequestParam int releaseYear) {
+        return movieClient.getResult(releaseYear).getMovies().stream()
                 .map(m -> movieMapper.mapToMovie(m))
                 .collect(Collectors.toList());
     }

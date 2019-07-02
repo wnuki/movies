@@ -23,11 +23,11 @@ public class MovieClient {
     @Autowired
     private MovieConfig movieConfig;
 
-    public ResponseDto getResult() {
+    public ResponseDto getResult(final int releaseYear) {
         URI uri = UriComponentsBuilder.fromHttpUrl(movieConfig.getMdbApiEndpoint() + "/movie")
                 .queryParam("api_key", movieConfig.getMdbApiKey())
                 .queryParam("sort_by", "vote_average.desc")
-                .queryParam("primary_release_year", 2000)
+                .queryParam("primary_release_year", releaseYear)
                 .queryParam("vote_average.gte", 8)
                 .queryParam("vote_count.gte", 10)
                 .queryParam("page", 1).build().encode().toUri();
