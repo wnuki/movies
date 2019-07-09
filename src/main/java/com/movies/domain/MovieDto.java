@@ -22,4 +22,5 @@ public class MovieDto {
     private boolean adult;
     private String overview;
     private String release_date;
+    private String region;
 }
