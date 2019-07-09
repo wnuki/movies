@@ -23,12 +23,18 @@
 
 <form id="form">
     <div class="form-group" style="margin-left:50px">
-        <label for="releaseYear">Let's start then. Just type a year: </label>
+        <label for="releaseYear">Release year</label>
         <input type="text" id="releaseYear" name="releaseYear" required minlength="4" maxlength="4" number="true">
     </div>
-    <button style="margin-left:50px" type="button" class="btn btn-primary" id="submit_button">Show me best movies
-        in that year
-    </button>
+    <div class="form-group" style="margin-left:50px">
+        <label for="rating">Minimal rating</label>
+        <input type="text" id="rating" name="rating">
+    </div>
+    <div class="form-group" style="margin-left:50px">
+        <label for="language">Original language</label>
+        <input type="text" id="language" name="language">
+    </div>
+    <button style="margin-left:50px" type="button" class="btn btn-primary" id="submit_button">Find movie</button>
 </form>
 
 <ol class="list-group" style="margin-left: 50px"></ol>
@@ -36,8 +42,11 @@
 <script>
     $(document).ready(function () {
 
-        let releaseYear = document.getElementById("releaseYear")
-        const apiUrl = "/v1/movieDb";
+        let releaseYear = document.getElementById("releaseYear");
+        let rating = document.getElementById("rating");
+        let language = document.getElementById("language");
+
+        const apiUrl = "https://peaceful-sands-32495.herokuapp.com/v1/movieDb";
         const $list = $('.list-group');
 
         $('.btn-primary').on('click', function () {
@@ -50,7 +59,9 @@
                 url: apiUrl + '/movies',
                 dataType: 'json',
                 data: {
-                    "releaseYear": releaseYear.value
+                    "releaseYear": releaseYear.value,
+                    "language": language.value,
+                    "vote_average": rating.value,
                 }
             })
                 .done((res) => {
@@ -72,6 +83,15 @@
                     number: true,
                     minlength: 4,
                     maxlength: 4
+                },
+                rating: {
+                    required: true,
+                    number: true,
+                    min: 0,
+                    max: 10
+                },
+                language: {
+                    minlength: 3
                 }
             },
             messages: {
@@ -80,11 +100,19 @@
                     number: "Please enter the year as a numerical value",
                     minlength: "Year should be 4 digits",
                     maxlength: "Year should be 4 digits"
+                },
+                rating: {
+                    required: "Please enter rating",
+                    number: "Please enter numerical value",
+                    min: "Minimum value is 0",
+                    max: "Maximum value is 10"
+                },
+                language: {
+                    minlength: "Please enter at least three characters"
                 }
             }
         });
     })
 </script>
-
 </body>
 </html>
