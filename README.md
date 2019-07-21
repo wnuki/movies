@@ -1,4 +1,4 @@
-# movies app
+# Let's find movie you'll love!
 
 ## General info
 This application allows to discover best movies meeting given criteria (year, language, minimum rating). The application fetches movie data using themoviedb.org API.  
