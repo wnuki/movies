@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="style.css" rel="stylesheet" type="text/css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+
+    <title>movie database</title>
+
+</head>
+
+<body style="background-color:LightGrey">
+
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="text-light bg-secondary">Find movie, you'll love!</h1>
+    </div>
+</div>
+
+<form id="form">
+    <div class="form-group" style="margin-left:50px">
+        <label for="releaseYear">Let's start then. Just type a year: </label>
+        <input type="text" id="releaseYear" name="releaseYear" required minlength="4" maxlength="4" number="true">
+    </div>
+    <button style="margin-left:50px" type="button" class="btn btn-primary" id="submit_button">Show me best movies
+        in that year
+    </button>
+</form>
+
+<ol class="list-group" style="margin-left: 50px"></ol>
+
+<script>
+    $(document).ready(function () {
+
+        let releaseYear = document.getElementById("releaseYear")
+        const apiUrl = "/v1/movieDb";
+        const $list = $('.list-group');
+
+        $('.btn-primary').on('click', function () {
+            const $btn = $(this);
+
+            $btn.addClass('loading');
+            $btn.prop('disabled', true);
+
+            $.ajax({
+                url: apiUrl + '/movies',
+                dataType: 'json',
+                data: {
+                    "releaseYear": releaseYear.value
+                }
+            })
+                .done((res) => {
+                    $list.empty();
+
+                    res.forEach(el => {
+                        $list.append(`<li><b>${el.title}</b>, release date: ${el.release_date}, rating: ${el.rating}</li>`);
+                    })
+                })
+                .always(() => {
+                    $btn.removeClass('loading');
+                    $btn.prop('disabled', false);
+                });
+        });
+        $("#form").validate({
+            rules: {
+                releaseYear: {
+                    required: true,
+                    number: true,
+                    minlength: 4,
+                    maxlength: 4
+                }
+            },
+            messages: {
+                releaseYear: {
+                    required: "Please enter the year",
+                    number: "Please enter the year as a numerical value",
+                    minlength: "Year should be 4 digits",
+                    maxlength: "Year should be 4 digits"
+                }
+            }
+        });
+    })
+</script>
+
+</body>
+</html>
